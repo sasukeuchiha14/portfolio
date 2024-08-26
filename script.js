@@ -1,301 +1,217 @@
-function only_num(event) {
-    let charCode = (event.witch) ? event.witch : event.keyCode;
-    if ( charCode>31 && ( charCode<48 || charCode>57 )) {
-        return false
+const Container = document.querySelector('.container'),
+mainVideo = document.querySelector('video'),
+videoTimeline = document.querySelector('.video-timeline'),
+progressBar = document.querySelector('.progress-bar'),
+volumeBtn = document.querySelector('.volume i'),
+volumeSlider = document.querySelector('.left input'),
+currentVidTime = document.querySelector('.current-time'),
+totalVidTime = document.querySelector('.video-duration'),
+skipBackward = document.querySelector('.skip-backward i'),
+playPause = document.querySelector('.play-pause i'),
+skipForward = document.querySelector('.skip-forward i'),
+speedBtn = document.querySelector('.playback-speed span'),
+speedOptions = document.querySelector('.speed-options'),
+picinPicBtn = document.querySelector('.pic-in-pic span'),
+fullScreenBtn = document.querySelector('.fullscreen i');
+let timer;
+
+const hideControls = () => {
+    if (mainVideo.paused) return;
+    timer = setTimeout(() => {
+        Container.classList.remove('controls');
+    }, 3000);
+}
+hideControls();
+
+Container.addEventListener('mousemove', () => {
+    Container.classList.add('controls');
+    clearTimeout(timer);
+    hideControls();
+});
+
+const formatTime = time => {
+    let seconds = Math.floor(time % 60),
+    minutes = Math.floor(time / 60) % 60,
+    hours = Math.floor(time / 3600);
+
+    seconds = seconds < 10 ? `0${seconds}` : seconds;
+    minutes = minutes < 10 ? `0${minutes}` : minutes;
+    hours = hours < 10 ? `0${hours}` : hours;
+
+    if (hours == 0) {
+        return `${minutes}:${seconds}`;
     }
-    return true
+    return `${hours}:${minutes}:${seconds}`;
+};
+
+mainVideo.addEventListener('timeupdate', e => {
+    const progress = (e.target.currentTime / e.target.duration) * 100;
+    progressBar.style.width = `${progress}%`;
+    currentVidTime.textContent = formatTime(e.target.currentTime);
+});
+
+mainVideo.addEventListener('loadedmetadata', () => {
+    totalVidTime.textContent = formatTime(mainVideo.duration);
+});
+
+document.addEventListener('click', e => {
+    if (e.target.tagName !== 'SPAN' || e.target.className !== 'material-symbols-rounded') {
+        speedOptions.classList.remove('show');
+    }
+});
+
+videoTimeline.addEventListener('click', e => {
+    let timelineWidth = videoTimeline.clientWidth;
+    mainVideo.currentTime = (e.offsetX / timelineWidth) * mainVideo.duration;
+});
+
+const draggablePregressBar = e => {
+    let timelineWidth = videoTimeline.clientWidth;
+    progressBar.style.width = `${e.offsetX}px`;
+    mainVideo.currentTime = (e.offsetX / timelineWidth) * mainVideo.duration;
+    currentVidTime.textContent = formatTime(mainVideo.currentTime);
 }
 
-function only_num_dot(event) {
-    let charCode = (event.witch) ? event.witch : event.keyCode;
-    if ( charCode!=46 && charCode>31 && ( charCode<48 || charCode>57 )) {
-        return false
-    }
-    return true
+videoTimeline.addEventListener('mousedown', () => {
+    videoTimeline.addEventListener('mousemove', draggablePregressBar);
+});
+videoTimeline.addEventListener('mouseup', () => {
+    videoTimeline.removeEventListener('mousemove', draggablePregressBar);
+});
+
+videoTimeline.addEventListener('mousemove', e => {
+    const progressTime = videoTimeline.querySelector('span');
+    progressTime.style.left = `${e.offsetX}px`;
+    progressTime.textContent = formatTime((e.offsetX / videoTimeline.clientWidth) * mainVideo.duration);
+});
+
+if (window.innerWidth < 540) {
+    var volume = 1;
+}
+else {
+    var volume = 0.5;
 }
 
-function display(name,id,index) {
-    if (document.getElementsByName(name)[index].checked == true){
-        document.getElementById(id).style.visibility = "visible";
+volumeBtn.addEventListener('click', () => {
+    if (!volumeBtn.classList.contains('fa-volume-high')) {
+        mainVideo.volume = volume;
+        volumeBtn.classList.replace('fa-volume-xmark', 'fa-volume-high');
     }
-    else {
-        document.getElementById(id).style.visibility = "hidden";
+    else{
+        mainVideo.volume = 0;
+        volumeBtn.classList.replace('fa-volume-high', 'fa-volume-xmark');
     }
+    volumeSlider.value = mainVideo.volume;
+});
+
+volumeSlider.addEventListener('input', e => {
+    volume = e.target.value;
+    mainVideo.volume = e.target.value;
+    if (e.target.value == 0) {
+        volumeBtn.classList.replace('fa-volume-high', 'fa-volume-xmark');
+    }
+    else{
+        volumeBtn.classList.replace('fa-volume-xmark', 'fa-volume-high');
+    }
+});
+
+document.addEventListener('click', e => {
+    if (e.target.tagName === 'VIDEO' && e.target.className !== 'wrapper') {
+        mainVideo.paused ? mainVideo.play() : mainVideo.pause();
+    }
+});
+
+playPause.addEventListener('click', () => {
+    mainVideo.paused ? mainVideo.play() : mainVideo.pause();
+});
+
+mainVideo.addEventListener('play', () => {
+    playPause.classList.replace('fa-play', 'fa-pause');
+});
+
+mainVideo.addEventListener('pause', () => {
+    playPause.classList.replace('fa-pause', 'fa-play');
+});
+
+skipBackward.addEventListener('click', () => {
+    mainVideo.currentTime -= 10;
+});
+
+skipForward.addEventListener('click', () => {
+    mainVideo.currentTime += 10;
+});
+
+speedBtn.addEventListener('click', () => {
+    speedOptions.classList.toggle('show');
+});
+
+speedOptions.querySelectorAll('li').forEach(option => {
+    option.addEventListener('click', () => {
+        mainVideo.playbackRate = option.dataset.speed;
+        speedOptions.querySelector('.active').classList.remove('active');
+        option.classList.add('active');
+    });
+});
+
+picinPicBtn.addEventListener('click', () => {
+    mainVideo.requestPictureInPicture();
+});
+
+fullScreenBtn.addEventListener('click', () => {
+    Container.classList.toggle('fullscreen');
+    if (document.fullscreenElement) {
+        fullScreenBtn.classList.replace('fa-compress', 'fa-expand');
+        return document.exitFullscreen();
+    }
+    fullScreenBtn.classList.replace('fa-expand', 'fa-compress');
+    Container.requestFullscreen();
+});
+
+
+
+const dropZone = document.getElementsByTagName('body')[0];
+const chooseFile = document.getElementById('file');
+const video = document.getElementById('video');
+const videoSource = document.getElementById('video-source');
+
+function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
 }
 
-var test_center_arr = [
-    ['anp',['Andhra.P.1','Andhra.P.2']],
-    ['aan',['A&N1','A&N2']],
-    ['arp',['Arunachal.P.1','Arunachal.P.2']],
-    ['ass',['Assam1','Assam2']],
-    ['del',['Delhi1','Delhi2']],
-    ['har',['Haryana1','Haryana2']],
-    ['hip',['Himachal.P.1','Himachal.P.2']],
-    ['kar',['Karnataka1','Karnataka2']],
-    ['kas',['Kashmir1','Kashmir2']],
-    ['ker',['Kerla1','Kerla2']],
-    ['mah',['Maharashtra1','Maharashtra2']],
-    ['odi',['Odisha1','Odisha2']],
-    ['raj',['Rajasthan1','Rajasthan2']],
-    ['sik',['Sikkim1','Sikkim2']],
-    ['tam',['T.N.1','T.N.2']],
-    ['tel',['Telangana1','Telangana2']],
-    ['utp',['U.P.1','U.P.2']],
-];
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, preventDefaults, false)
+});
 
-function tc_options(state_value) {
-    let test_center_select = document.getElementById('test_center');
-    while (test_center_select.length != 0) {
-        test_center_select.removeChild(test_center_select.lastChild);
-    }
-    test_center_arr.forEach(
-        function(item) {
-            if (item[0] == state_value) {
-                for (i=0;i<item[1].length;i++) {
-                    var opt = document.createElement('option');
-                    opt.value = item[1][i];
-                    opt.text = item[1][i];
-                    test_center_select.options.add(opt);
-                }
-            }
-        }
-    );
+['dragenter', 'dragover'].forEach(eventName => {
+    dropZone.addEventListener(eventName, () => dropZone.classList.add('highlight'), false)
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, () => dropZone.classList.remove('highlight'), false)
+});
+
+dropZone.addEventListener('drop', handleDrop, false);
+
+function handleDrop(e) {
+    let dt = e.dataTransfer;
+    let files = dt.files;
+
+    handleFiles(files);
 }
 
-function validateFunc_multipleNames(name) {
-    let name_arr = document.getElementsByName(name)
-    for (i=0;i<name_arr.length;i++) {
-        if (name_arr[i].checked == true) {
-            return true
-        }
-    }
-    return false
-}
+function handleFiles(files) {
+    if (files.length > 0 && files[0].type.includes('video')) {
+        let file = files[0];
+        let url = URL.createObjectURL(file);
 
-function validateFunc() {
-    
-    document.getElementById('security_answer').style.backgroundColor = 'white'
-    document.getElementById('security_question').style.backgroundColor = 'white'
-    document.getElementById('pass2').style.backgroundColor = 'white'
-    document.getElementById('pass1').style.backgroundColor = 'white'
-    document.getElementById('pass2').style.backgroundColor = 'white'
-    document.getElementById('pass1').style.backgroundColor = 'white'
-    document.getElementById('exam_name').style.backgroundColor = 'white'
-    document.getElementById('pass12_school_type').style.backgroundColor = 'white'
-    document.getElementById('pass10_year').style.backgroundColor = 'white'
-    document.getElementById('m_number').style.backgroundColor = 'white'
-    document.getElementById('e_mail').style.backgroundColor = 'white'
-    document.getElementById('pin_code').style.backgroundColor = 'white'
-    document.getElementById('state').style.backgroundColor = 'white'
-    document.getElementById('distirct').style.backgroundColor = 'white'
-    document.getElementById('place').style.backgroundColor = 'white'
-    document.getElementById('locality').style.backgroundColor = 'white'
-    document.getElementById('address').style.backgroundColor = 'white'
-    document.getElementById('aadhaar_number').style.backgroundColor = 'white'
-    document.getElementById('DOB').style.backgroundColor = 'white'
-    document.getElementById('p_number').style.backgroundColor = 'white'
-    document.getElementById('m_name').style.backgroundColor = 'white'
-    document.getElementById('f_name').style.backgroundColor = 'white'
-    document.getElementById('c_name').style.backgroundColor = 'white'
-    
-    if (document.getElementById('c_name').value.length == 0) {
-        alert("Please Enter your Name")
-        document.getElementById('c_name').style.backgroundColor = 'rgb(255, 221, 221)';
-        document.getElementById('c_name').focus()
-        return false
-    }
-    
-    if (document.getElementById('f_name').value.length == 0) {
-        alert("Please Enter your Father's Name")
-        document.getElementById('f_name').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('f_name').focus()
-        return false
-    }
-    
-    if (document.getElementById('m_name').value.length == 0) {
-        alert("Please Enter your Mother's Name")
-        document.getElementById('m_name').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('m_name').focus()
-        return false
-    }
-    
-    if (document.getElementById('p_number').value.length != 10) {
-        alert("Please Enter your Phone Number Properly")
-        document.getElementById('p_number').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('p_number').focus()
-        return false
-    }
-    
-    if (document.getElementById('DOB').value.length == 0) {
-        alert("Please Select your Date of Birth")
-        document.getElementById('DOB').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('DOB').focus()
-        return false
-    }
-    
-    if (!validateFunc_multipleNames('gender')) {
-        alert("Please select your Gender")
-        document.getElementsByName('gender')[2].focus()
-        return false
-    }
-    
-    if (!validateFunc_multipleNames('category')) {
-        alert("Please select your Category")
-        document.getElementsByName('category')[4].focus()
-        return false
-    }
-    
-    if (!validateFunc_multipleNames('residency')) {
-        alert("Please select your Residency")
-        document.getElementsByName('category')[0].focus()
-        return false
-    }
-    
-    if (document.getElementById('aadhaar_number').value.length == 0) {
-        alert("Please enter your Aadhaar Number")
-        document.getElementById('aadhaar_number').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('aadhaar_number').focus()
-        return false
-    }
-    
-    if (document.getElementById('address').value.length == 0) {
-        alert("Please enter your Address")
-        document.getElementById('address').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('address').focus()
-        return false
-    }
-    
-    if (document.getElementById('locality').value.length == 0) {
-        alert("Please enter your Locality")
-        document.getElementById('locality').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('locality').focus()
-        
-        return false
-    }
-    
-    if (document.getElementById('place').value.length == 0) {
-        alert("Please enter your Place")
-        document.getElementById('place').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('place').focus()
-        return false
-    }
-    
-    if (document.getElementById('distirct').value.length == 0) {
-        alert("Please enter your Distirct")
-        document.getElementById('distirct').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('distirct').focus()
-        return false
-    }
-    
-    if (document.getElementById('state').value.length == 0) {
-        alert("Please enter your State")
-        document.getElementById('state').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('state').focus()
-        return false
-    }
-    
-    if (document.getElementById('pin_code').value.length != 6) {
-        alert("Please enter your Pin Code properly")
-        document.getElementById('pin_code').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('pin_code').focus()
-        return false
-    }
-    
-    if (document.getElementById('e_mail').value.length == 0 || !document.getElementById('e_mail').value.includes('@') || !document.getElementById('e_mail').value.includes('.com') ) {
-        alert("Please enter your E-mail properly")
-        document.getElementById('e_mail').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('e_mail').focus()
-        return false
-    }
-    
-    if (document.getElementById('m_number').value.length != 10) {
-        alert("Please enter your Mobile Number Properly")
-        document.getElementById('m_number').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('m_number').focus()
-        return false
-    }
-    
-    if (document.getElementById('pass10_year').value.length != 0) {
-        alert("Please enter your Passing Year properly")
-        document.getElementById('pass10_year').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('pass10_year').focus()
-        return false
-    }
-    
-    if (document.getElementById('pass12_school_type').value.length == 0) {
-        alert("Please Enter your School Board")
-        document.getElementById('pass12_school_type').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('pass12_school_type').focus()
-        return false
-    }
-    
-    if (document.getElementById('exam_name').value.length == 0) {
-        alert("Please Enter The Name of the Qualifying Exam")
-        document.getElementById('exam_name').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('exam_name').focus()
-        return false
-    }
-    
-    if (!validateFunc_multipleNames('pass12_place')) {
-        alert("Please select your Place of Class 12th Schooling")
-        document.getElementsByName('pass12_place')[0].focus()
-        return false
-    }
-    
-    if (!validateFunc_multipleNames('pass12_improvement')) {
-        alert("Please select that if you appeared for Improvement in Class 12")
-        document.getElementsByName('pass12_improvement')[0].focus()
-        return false
-    }
-    
-    if (!validateFunc_multipleNames('pass12_institution_type')) {
-        alert("Please select your type of Institution of Class 12th")
-        document.getElementsByName('pass12_institution_type')[0].focus()
-        return false
-    }
-    
-    if (!validateFunc_multipleNames('12pass_prep_type')) {
-        alert("Please select your mode of Preperation")
-        document.getElementsByName('12pass_prep_type')[0].focus()
-        return false
-    }
-    
-    if (document.getElementById('pass1').value.length == 0) {
-        alert("Please enter your Password")
-        document.getElementById('pass1').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('pass1').focus()
-        return false
-    }
-    
-    if (document.getElementById('pass2').value.length == 0) {
-        alert("Please enter your Confirmation Password")
-        document.getElementById('pass2').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('pass2').focus()
-        return false
-    }
-    
-    if (document.getElementById('pass1').value != document.getElementById('pass2').value) {
-        alert("Password Doesn't Match. Please try Again.");
-        document.getElementById('pass1').value = "";
-        document.getElementById('pass2').value = "";
-        document.getElementById('pass1').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('pass2').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('pass1').focus()
-        return false;
-    }
-    
-    if (document.getElementById('security_question').value.length == 0) {
-        alert("Please enter your Security Question")
-        document.getElementById('security_question').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('security_question').focus()
-        return false
-    }
-    
-    if (document.getElementById('security_answer').value.length == 0) {
-        alert("Please enter your Security Answer")
-        document.getElementById('security_answer').style.backgroundColor = 'rgb(255, 221, 221)'
-        document.getElementById('security_answer').focus()
-        return false
+        videoSource.src = url;
+        video.load();
+    } else {
+        alert("Please drop a valid video file.");
     }
 }
 
+chooseFile.addEventListener('change', () => {
+    handleFiles(chooseFile.files);
+});
