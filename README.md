@@ -17,7 +17,7 @@ You can view my portfolio live at: [hardikgarg.me](https://hardikgarg.me)
 
 ## 📫 Contact Me
 
-Let’s connect! Feel free to reach out via email or connect with me on LinkedIn:
+Let's connect! Feel free to reach out via email or connect with me on LinkedIn:
 
 - ✉️ **Email**: [hgarg7123@gmail.com](mailto:hgarg7123+github@gmail.com)  
   *“Your message is just a click away!”*
