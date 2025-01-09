@@ -3307,14 +3307,22 @@ table.alt tbody tr td {
 
 }
 
-/* @media screen and (max-width: 480px) {
+#nav .links .mobile {
+	display: none;
+}
 
-	.pagination .page,
+@media screen and (max-width: 480px) {
+
+	/* .pagination .page,
 	.pagination .extra {
 		display: none;
+	} */
+
+	#nav .links .mobile {
+		display: block;
 	}
 
-} */
+}
 
 .pagination a,
 .pagination span {
