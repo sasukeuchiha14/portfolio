@@ -8,8 +8,8 @@ The tools and technologies I used for this project include:<br/>
 - **`HTML`** - Markup language for creating web pages<br/>
 - **`CSS`** - Styling language to enhance the look and feel of the site<br/>
 - **`JavaScript`** - Programming language for interactive features<br/>
-- **`GitHub`** - Version control system & CI/CD via GitHub Pages integration<br/>
-- **`GitHub Pages`** - Web hosting platform for static sites<br/>
+- **`GitHub`** - Version control system for code management<br/>
+- **`Netlify`** - Web hosting platform for deployment and continuous integration<br/>
 
 ## 🌐 Live Demo
 
