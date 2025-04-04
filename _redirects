@@ -21,9 +21,11 @@
 /contact            /index.html#contact
 /contacts           /index.html#contact
 /contactme          /index.html#contact
-/email              mailto:hgarg7123+portfolio@gmail.com
-/mail               mailto:hgarg7123+portfolio@gmail.com
-/phone              tel:+918000833619
+/mail               /index.html#contact
+/email              /index.html#contact
+/mailto             /index.html#contact
+/phone              /index.html#contact
+/phone-number       /index.html#contact
 /whatsapp           https://wa.me/918000833619
 /whatsapp-me        https://wa.me/918000833619
 /social             /index.html#contact
