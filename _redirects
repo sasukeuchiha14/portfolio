@@ -17,7 +17,18 @@
 /video-player       https://video-player.hardikgarg.me/
 /wifi-security      https://wifi-security.hardikgarg.me/
 
-# Redirects for social media
+# Redirects for contacts and social media
+/contact            /index.html#contact
+/contacts           /index.html#contact
+/contactme          /index.html#contact
+/email              mailto:hgarg7123+portfolio@gmail.com
+/mail               mailto:hgarg7123+portfolio@gmail.com
+/phone              tel:+918000833619
+/whatsapp           https://wa.me/918000833619
+/whatsapp-me        https://wa.me/918000833619
+/social             /index.html#contact
+/socials            /index.html#contact
+/social-media       /index.html#contact
 /github             https://github.com/sasukeuchiha14
 /linkedin           https://www.linkedin.com/in/hardikgarg01/
 /insta              https://www.instagram.com/hardikgarg01/
