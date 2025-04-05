@@ -18,25 +18,27 @@
 /wifi-security      https://wifi-security.hardikgarg.me/
 
 # Redirects for contacts and social media
-/contact            /index.html#contact
-/contacts           /index.html#contact
-/contact-me          /index.html#contact
-/mail               /index.html#mail
-/email              /index.html#mail
-/mailto             /index.html#mail
-/phone              /index.html#phone
-/phone-number       /index.html#phone
-/whatsapp           https://wa.me/918000833619
-/whatsapp-me        https://wa.me/918000833619
-/social             /index.html#social
-/socials            /index.html#social
-/social-media       /index.html#social
+/contact            /index.html#contact1
+/contacts           /index.html#contact2
+/contact-me         /index.html#contact1
+/mail               /index.html#contact2
+/email              /index.html#contact2
+/mailto             /index.html#contact2
+/phone              /index.html#contact2
+/phone-number       /index.html#contact2
+/social             /index.html#contact2
+/socials            /index.html#contact2
+/socialmedia        /index.html#contact2
+/social-media       /index.html#contact2
 /github             https://github.com/sasukeuchiha14
 /linkedin           https://www.linkedin.com/in/hardikgarg01/
 /insta              https://www.instagram.com/hardikgarg01/
 /instagram          https://www.instagram.com/hardikgarg01/
 /fb                 https://www.facebook.com/hardikgarg01/
 /facebook           https://www.facebook.com/hardikgarg01/
+/whatsapp           https://wa.me/918000833619
+/whatsapp-me        https://wa.me/918000833619
+/twitter            /index.html 200
 /x                  /index.html 200
 
 # Redirects all 404 to the index
