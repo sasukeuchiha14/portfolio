@@ -20,7 +20,7 @@
 # Redirects for contacts and social media
 /contact            /index.html#contact
 /contacts           /index.html#contact
-/contactme          /index.html#contact
+/contact-me          /index.html#contact
 /mail               /index.html#mail
 /email              /index.html#mail
 /mailto             /index.html#mail
