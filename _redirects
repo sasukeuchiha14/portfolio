@@ -41,5 +41,9 @@
 /twitter            /index.html 200
 /x                  /index.html 200
 
+# Redirects for cv and resume
+/cv                 /Hardik%20Garg%20-%20Web%20Developer.pdf
+/resume             /Hardik%20Garg%20-%20Web%20Developer.pdf
+
 # Redirects all 404 to the index
 /*                  /index.html 200
