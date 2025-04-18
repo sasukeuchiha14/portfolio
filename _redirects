@@ -19,7 +19,19 @@
 /video-player       https://video-player.hardikgarg.me/
 /wifi-security      https://wifi-security.hardikgarg.me/
 
-# Redirects for contacts and social media
+# Redirects for profiles
+/microsoft-learn    https://learn.microsoft.com/en-us/users/hardikgarg01/
+/mslearn            https://learn.microsoft.com/en-us/users/hardikgarg01/
+/leetcode           https://leetcode.com/hardikgarg0106/
+/lc                 https://leetcode.com/hardikgarg0106/
+/hackerrank         https://www.hackerrank.com/hardikgarg01
+/hr                 https://www.hackerrank.com/hardikgarg01
+/stackoverflow      https://stackoverflow.com/users/23016056
+/stack-overflow     https://stackoverflow.com/users/23016056
+/so                 https://stackoverflow.com/users/23016056
+/dev                https://dev.to/hardikgarg01
+
+# Redirects for contacts
 /contact            /index.html#contact1
 /contacts           /index.html#contact2
 /contact-me         /index.html#contact1
@@ -32,6 +44,8 @@
 /socials            /index.html#contact2
 /socialmedia        /index.html#contact2
 /social-media       /index.html#contact2
+
+# Redirects for social media links
 /github             https://github.com/sasukeuchiha14
 /linkedin           https://www.linkedin.com/in/hardikgarg01/
 /insta              https://www.instagram.com/hardikgarg01/
